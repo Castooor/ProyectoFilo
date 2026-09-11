@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel del Expositor — ¿Imagen o contexto? (Susan Sontag)</title>
+  <meta name="description" content="Pantalla de estadísticas en tiempo real para el expositor universitario sobre la actividad de Susan Sontag.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <div class="admin-container">
+    
+    <!-- Encabezado del Expositor -->
+    <header class="admin-header">
+      <div>
+        <div class="badge-academic">Modo Exposición · Panel del Docente / Expositor</div>
+        <h1 class="app-title" style="font-size: 2rem; margin-bottom: 2px;">Resultados en Tiempo Real</h1>
+        <p class="app-subtitle">Observatorio de percepción y contexto · Susan Sontag</p>
+      </div>
+
+      <div class="admin-controls">
+        <div id="liveBadge" class="live-indicator">
+          <span class="live-dot"></span>
+          <span id="liveStatusText">En vivo (cada 3s)</span>
+        </div>
+
+        <button id="btnRefreshNow" class="btn-secondary" type="button" title="Consultar API ahora">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+          </svg>
+          Actualizar
+        </button>
+
+        <button id="btnResetSession" class="btn-secondary" type="button" style="color: #f87171; border-color: rgba(248, 113, 113, 0.2);" title="Borrar respuestas anteriores para iniciar la clase">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          Reiniciar datos
+        </button>
+
+        <a href="index.html" class="btn-secondary" target="_blank" title="Abrir la encuesta que ven los alumnos">
+          🔗 Vista Alumnos
+        </a>
+      </div>
+    </header>
+
+    <!-- Resumen Superior de Métricas -->
+    <section class="stats-summary-grid">
+      <div class="stat-card">
+        <div id="statTotalParticipants" class="stat-value">0</div>
+        <div class="stat-label">Participantes Conectados</div>
+      </div>
+      <div class="stat-card">
+        <div id="statTotalResponses" class="stat-value">0</div>
+        <div class="stat-label">Respuestas Registradas</div>
+      </div>
+      <div class="stat-card">
+        <div id="statGlobalAccuracy" class="stat-value" style="color: var(--accent-amber);">0%</div>
+        <div class="stat-label">Acierto Global del Grupo</div>
+      </div>
+    </section>
+
+    <!-- Lista de Preguntas con Gráficos de Distribución -->
+    <main id="adminQuestionsList">
+      
+      <!-- Pregunta 1 -->
+      <article class="admin-question-card" id="cardQ1">
+        <div>
+          <img src="images/photo1.jfif" alt="Fotografía 1" class="admin-photo-preview">
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px; text-align: center;">
+            <strong>David Seymour (Chim)</strong><br>Extremadura, mayo 1936
+          </div>
+        </div>
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+            <div>
+              <span class="badge-academic" style="margin-bottom: 4px;">Pregunta 1</span>
+              <h3 style="font-size: 1.15rem; color: #ffffff;">¿Qué está ocurriendo realmente en esta fotografía?</h3>
+            </div>
+            <div style="text-align: right;">
+              <span style="font-size: 0.85rem; color: var(--text-muted);">Aciertos:</span>
+              <div id="pctCorrectQ1" style="font-size: 1.4rem; font-weight: 700; color: var(--accent-emerald);">0%</div>
+            </div>
+          </div>
+
+          <!-- Barra Opción A -->
+          <div class="chart-row">
+            <div class="chart-header">
+              <span>Opción A: «Buscando refugio durante un ataque aéreo»</span>
+              <span id="labelQ1A" style="font-weight: 600;">0% (0 votos)</span>
+            </div>
+            <div class="chart-bar-bg">
+              <div id="barQ1A" class="chart-bar-fill bar-incorrect" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <!-- Barra Opción B (CORRECTA) -->
+          <div class="chart-row">
+            <div class="chart-header">
+              <span>
+                <span class="correct-badge">✓ CORRECTA</span>
+                Opción B: «Reunión política antes de que comenzara la guerra»
+              </span>
+              <span id="labelQ1B" style="font-weight: 600; color: var(--accent-emerald);">0% (0 votos)</span>
+            </div>
+            <div class="chart-bar-bg">
+              <div id="barQ1B" class="chart-bar-fill bar-correct" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <div style="font-size: 0.85rem; color: var(--text-secondary); background: rgba(255,255,255,0.03); padding: 10px 14px; border-radius: var(--radius-sm); border-left: 3px solid var(--accent-amber);">
+            <strong>Tesis Sontag:</strong> La memoria colectiva confirió un carácter bélico a una imagen captada meses antes del estallido de la guerra civil. La mirada al cielo se asume como terror ante bombas, cuando era una asamblea campesina de reforma agraria.
+          </div>
+        </div>
+      </article>
+
+      <!-- Pregunta 2 -->
+      <article class="admin-question-card" id="cardQ2">
+        <div>
+          <img src="images/photo2.jfif" alt="Fotografía 2" class="admin-photo-preview">
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px; text-align: center;">
+            <strong>Dorothea Lange</strong><br>Nipomo, California, 1936
+          </div>
+        </div>
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+            <div>
+              <span class="badge-academic" style="margin-bottom: 4px;">Pregunta 2</span>
+              <h3 style="font-size: 1.15rem; color: #ffffff;">¿Cuál de estos contextos corresponde a la fotografía?</h3>
+            </div>
+            <div style="text-align: right;">
+              <span style="font-size: 0.85rem; color: var(--text-muted);">Aciertos:</span>
+              <div id="pctCorrectQ2" style="font-size: 1.4rem; font-weight: 700; color: var(--accent-emerald);">0%</div>
+            </div>
+          </div>
+
+          <!-- Barra Opción A (CORRECTA) -->
+          <div class="chart-row">
+            <div class="chart-header">
+              <span>
+                <span class="correct-badge">✓ CORRECTA</span>
+                Opción A: «Pobreza durante la Gran Depresión en Estados Unidos»
+              </span>
+              <span id="labelQ2A" style="font-weight: 600; color: var(--accent-emerald);">0% (0 votos)</span>
+            </div>
+            <div class="chart-bar-bg">
+              <div id="barQ2A" class="chart-bar-fill bar-correct" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <!-- Barra Opción B -->
+          <div class="chart-row">
+            <div class="chart-header">
+              <span>Opción B: «Refugiados tras escapar de una ciudad destruida»</span>
+              <span id="labelQ2B" style="font-weight: 600;">0% (0 votos)</span>
+            </div>
+            <div class="chart-bar-bg">
+              <div id="barQ2B" class="chart-bar-fill bar-incorrect" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <div style="font-size: 0.85rem; color: var(--text-secondary); background: rgba(255,255,255,0.03); padding: 10px 14px; border-radius: var(--radius-sm); border-left: 3px solid var(--accent-amber);">
+            <strong>Tesis Sontag:</strong> El sufrimiento humano luce universal. Sin el rótulo histórico del Farm Security Administration, el dolor de la madre campesina puede ser proyectado como víctima de un asedio de guerra o catástrofe bélica.
+          </div>
+        </div>
+      </article>
+
+      <!-- Pregunta 3 -->
+      <article class="admin-question-card" id="cardQ3">
+        <div>
+          <img src="images/photo3.jfif" alt="Fotografía 3" class="admin-photo-preview">
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px; text-align: center;">
+            <strong>Archivo Histórico</strong><br>Guerra Civil Española
+          </div>
+        </div>
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+            <div>
+              <span class="badge-academic" style="margin-bottom: 4px;">Pregunta 3</span>
+              <h3 style="font-size: 1.15rem; color: #ffffff;">¿Cuál es el contexto histórico correcto?</h3>
+            </div>
+            <div style="text-align: right;">
+              <span style="font-size: 0.85rem; color: var(--text-muted);">Aciertos:</span>
+              <div id="pctCorrectQ3" style="font-size: 1.4rem; font-weight: 700; color: var(--accent-emerald);">0%</div>
+            </div>
+          </div>
+
+          <!-- Barra Opción A (CORRECTA) -->
+          <div class="chart-row">
+            <div class="chart-header">
+              <span>
+                <span class="correct-badge">✓ CORRECTA</span>
+                Opción A: «Consecuencias de un conflicto armado sobre la población civil»
+              </span>
+              <span id="labelQ3A" style="font-weight: 600; color: var(--accent-emerald);">0% (0 votos)</span>
+            </div>
+            <div class="chart-bar-bg">
+              <div id="barQ3A" class="chart-bar-fill bar-correct" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <!-- Barra Opción B -->
+          <div class="chart-row">
+            <div class="chart-header">
+              <span>Opción B: «Escena preparada para una película (ficción)»</span>
+              <span id="labelQ3B" style="font-weight: 600;">0% (0 votos)</span>
+            </div>
+            <div class="chart-bar-bg">
+              <div id="barQ3B" class="chart-bar-fill bar-incorrect" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <div style="font-size: 0.85rem; color: var(--text-secondary); background: rgba(255,255,255,0.03); padding: 10px 14px; border-radius: var(--radius-sm); border-left: 3px solid var(--accent-amber);">
+            <strong>Tesis Sontag:</strong> Cuando una fotografía carece de contexto institucional o de fe documental, el espectador moderno tiende a dudar de su veracidad o a reducirla a espectáculo montado o cinematográfico.
+          </div>
+        </div>
+      </article>
+
+    </main>
+
+    <footer style="text-align: center; margin-top: 40px; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--border-subtle); padding-top: 20px;">
+      Exposición Universitaria · Filosofía y Fotografía · Susan Sontag: <em>Ante el dolor de los demás</em> (2003)
+    </footer>
+
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
