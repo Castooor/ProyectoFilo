@@ -17,7 +17,8 @@
 const APP_CONFIG = (() => {
   // ── URL de la API en producción (Render) ─────────────────────────
   // Reemplaza esta cadena con la URL real que Render te asignó:
-  const API_URL_PRODUCCION = "https://TU-API-AQUI.onrender.com";
+  const API_URL_PRODUCCION = "https://proyectofilo-1.onrender.com/";
+
   // ─────────────────────────────────────────────────────────────────
 
   const isLocal =
